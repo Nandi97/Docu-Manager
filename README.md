@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Docu Manage(Small Business Automation Web App)
 
-## Getting Started
+## Overview
 
-First, run the development server:
+The Small Business Automation Web App is designed to streamline and digitize various small business functions. It provides a suite of features to automate tasks such as creating purchase orders, managing invoices, handling asset management, onboarding employees, and more. The app is built with flexibility in mind, allowing for future expansion and customization.
+
+## Features
+
+-   Dashboard: Provides a central overview of key metrics and analytics.
+-   User Management: Manage user accounts and roles.
+-   Employee Management: Track employee details and handle onboarding processes.
+-   Profile: Manage user profile settings.
+-   Kanban: Organize and track tasks using a Kanban board.
+-   Finance: Handle financial operations including purchase orders and invoices.
+-   Asset Management: Manage company assets.
+-   Leave Management: Process and approve leave applications.
+-   Official Letters: Create and manage official correspondence.
+-   Settings: Configure application settings.
+-   Login: User authentication and access control.
+
+## Installation
+
+### Prerequisites
+
+-   Node.js (v14 or later)
+-   npm, pnpm or yarn
+-   PostgreSQL or another database (depending on your choice)
+
+### Steps
+
+1. Clone the Repository
 
 ```bash
-npm run dev
+git clone https://github.com/yourusername/your-repository.git
+cd your-repository
+```
+
+2. Install Dependancies
+
+```bash
+npm install
 # or
-yarn dev
+yarn install
+# or
+pnpm install
+```
+
+3. Configure Environment Variables
+   Create a .env file in the root directory and add your environment-specific variables. Example:
+
+```makefile
+DATABASE_URL=your_database_url
+JWT_SECRET=your_jwt_secret
+```
+
+4. Run Database Migrations
+   If using Prisma:
+
+```bash
+npx prisma migrate dev
+```
+
+5. Start the Application
+
+```bash
+npm dev
 # or
 pnpm dev
 # or
-bun dev
+yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-   Dashboard: Access the main overview and analytics.
+-   User Management: Add, remove, and manage user accounts and roles.
+-   Employee Management: Manage employee data and onboarding processes.
+-   Profile: Update your user profile and settings.
+-   Kanban: Track tasks and projects with Kanban boards.
+-   Finance: Create and manage purchase orders and invoices.
+-   Asset Management: Keep track of company assets.
+-   Leave Management: Handle employee leave requests and approvals.
+-   Official Letters: Generate and manage official correspondence.
+-   Settings: Configure application settings and preferences.
+-   Login: Authenticate and access the application.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Contributing
 
-## Learn More
+1. Fork the Repository
+2. Create a New Branch
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git checkout -b feature/new-feature
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Commit Your Changes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```bash
+git add .
+git commit -m "Add new feature"
+```
 
-## Deploy on Vercel
+4. Push to the Branch
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+git push origin feature/new-feature
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+5. Create a Pull Request
+   Navigate to the repository on GitHub and create a pull request with your changes.
+
+#License
+This project is licensed under the MIT License - see the LICENSE file for details.
