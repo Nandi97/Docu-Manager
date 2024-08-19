@@ -6,69 +6,79 @@ export function getNavItems() {
         {
             title: 'Dashboard',
             href: '/dashboard',
-            icon: 'dashboard',
+            icon: 'radix-icons:dashboard',
             label: 'Dashboard',
+            listOrder: 1,
             items: []
         },
         {
             title: 'User',
             href: '/dashboard/user',
-            icon: 'user',
+            icon: 'radix-icons:person',
             label: 'User',
+            listOrder: 2,
             items: []
         },
         {
             title: 'Employee',
             href: '/dashboard/employee',
-            icon: 'employee',
+            icon: 'mdi:account-tie',
             label: 'Employee',
+            listOrder: 3,
             items: []
         },
         {
             title: 'Profile',
             href: '/dashboard/profile',
-            icon: 'profile',
+            icon: 'mdi:account-box-outline',
             label: 'Profile',
+            listOrder: 4,
             items: []
         },
         {
-            title: 'Kanban',
-            href: '/dashboard/kanban',
-            icon: 'kanban',
-            label: 'Kanban',
+            title: 'Projects',
+            href: '/dashboard/projects',
+            icon: 'mdi:checkbox-blank-badge-outline',
+            label: 'Projects',
+            listOrder: 5,
             items: []
         },
         {
             title: 'Finance',
-            icon: 'finance',
+            icon: 'mdi:finance',
             label: 'Finance',
+            listOrder: 6,
             items: [
                 {
                     title: 'Purchase Orders',
                     href: '/dashboard/finance/purchase-orders',
-                    icon: 'purchase_orders',
+                    icon: 'mdi:cart-arrow-down',
                     label: 'Purchase Orders',
+                    listOrder: 1,
                     items: []
                 },
                 {
                     title: 'Invoices',
                     href: '/dashboard/finance/invoices',
-                    icon: 'invoices',
+                    icon: 'mdi:invoice-list-outline',
                     label: 'Invoices',
+                    listOrder: 2,
                     items: []
                 },
                 {
                     title: 'Expense Tracking',
                     href: '/dashboard/finance/expenses',
-                    icon: 'expenses',
+                    icon: 'mdi:cash-multiple',
                     label: 'Expenses',
+                    listOrder: 3,
                     items: []
                 },
                 {
                     title: 'Budgeting',
                     href: '/dashboard/finance/budgeting',
-                    icon: 'budgeting',
+                    icon: 'mdi:wallet-bifold-outline',
                     label: 'Budgeting',
+                    listOrder: 4,
                     items: []
                 }
             ]
@@ -77,33 +87,38 @@ export function getNavItems() {
             title: 'HR & Administration',
             icon: 'hr_admin',
             label: 'HR & Admin',
+            listOrder: 7,
             items: [
                 {
                     title: 'Staff Onboarding',
                     href: '/dashboard/hr/onboarding',
-                    icon: 'onboarding',
+                    icon: 'mdi:account-plus-outline',
                     label: 'Staff Onboarding',
+                    listOrder: 1,
                     items: []
                 },
                 {
                     title: 'Leave Applications',
                     href: '/dashboard/hr/leave-applications',
-                    icon: 'leave_applications',
+                    icon: 'mdi:calendar-remove-outline',
                     label: 'Leave Applications',
+                    listOrder: 2,
                     items: []
                 },
                 {
                     title: 'Employee Management',
                     href: '/dashboard/hr/employee-management',
-                    icon: 'employee_management',
+                    icon: 'mdi:account-multiple-outline',
                     label: 'Employee Management',
+                    listOrder: 3,
                     items: []
                 },
                 {
                     title: 'Payroll',
                     href: '/dashboard/hr/payroll',
-                    icon: 'payroll',
+                    icon: 'streamline:money-cash-coins-stack-accounting-billing-payment-stack-cash-coins-currency-money-finance',
                     label: 'Payroll',
+                    listOrder: 4,
                     items: []
                 }
             ]
@@ -111,75 +126,42 @@ export function getNavItems() {
         {
             title: 'Asset Management',
             href: '/dashboard/assets',
-            icon: 'assets',
+            icon: 'carbon:task-asset-view',
+            listOrder: 8,
             label: 'Assets',
             items: []
         },
         {
             title: 'Official Letters',
             href: '/dashboard/official-letters',
-            icon: 'official_letters',
+            icon: 'mdi:note-alert-outline',
             label: 'Official Letters',
+            listOrder: 9,
             items: []
         },
         {
             title: 'Reports',
             href: '/dashboard/reports',
-            icon: 'reports',
+            icon: 'mdi:receipt-text-arrow-right-outline',
             label: 'Reports',
+            listOrder: 10,
             items: []
         },
         {
             title: 'Settings',
             href: '/dashboard/settings',
-            icon: 'settings',
+            icon: 'mdi:cog-outline',
             label: 'Settings',
+            listOrder: 11,
             items: []
         },
         {
             title: 'Login',
             href: '/',
-            icon: 'login',
+            icon: 'mdi:login',
             label: 'Login',
+            listOrder: 12,
             items: []
         }
     ];
-}
-export async function createOrUpdateNavItem(
-    navItem: any,
-    parentId: string | null = null
-) {
-    const existingMenu = await prisma.navItem.findUnique({
-        where: { title: navItem.title }
-    });
-
-    const data = {
-        ...navItem,
-        parentId,
-        items: undefined // Prevent direct assignment of nested items
-    };
-
-    let savedNavItem;
-
-    if (!existingMenu) {
-        savedNavItem = await prisma.navItem.create({
-            data
-        });
-        console.log(`Created menu item: ${savedNavItem.title}`);
-    } else {
-        savedNavItem = await prisma.navItem.update({
-            where: { id: existingMenu.id },
-            data
-        });
-        console.log(`Updated menu item: ${savedNavItem.title}`);
-    }
-
-    // Handle nested items
-    if (navItem.items && navItem.items.length > 0) {
-        for (const nestedItem of navItem.items) {
-            await createOrUpdateNavItem(nestedItem, savedNavItem.id);
-        }
-    }
-
-    return savedNavItem;
 }

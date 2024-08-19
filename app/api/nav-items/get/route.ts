@@ -9,7 +9,14 @@ export async function GET(request: NextRequest) {
     // }
 
     try {
-        const data = await prisma.navItem.findMany({});
+        const data = await prisma.navItem.findMany({
+            include: {
+                items: true // Include nested items
+            },
+            orderBy: {
+                listOrder: 'asc'
+            }
+        });
 
         return NextResponse.json(data, { status: 200 });
     } catch (err) {

@@ -65,15 +65,36 @@ model VerificationToken {
 }
 
 model NavItem {
-  id          String    @id @default(cuid())
-  title       String    @unique
+  id          String   @id @default(cuid())
+  title       String   @unique
   href        String? // Optional field
-  disabled    Boolean?  @default(false)
-  external    Boolean?  @default(false)
+  disabled    Boolean? @default(false)
+  external    Boolean? @default(false)
   icon        String? // Optional field
   label       String?
   description String? // Optional field
-  parentId    String? // Foreign key for nesting
-  parent      NavItem?  @relation("ParentItem", fields: [parentId], references: [id])
-  items       NavItem[] @relation("ParentItem")
+  listOrder   Int
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  items NavSubItem[] @relation("ParentItem")
+}
+
+model NavSubItem {
+  id          String   @id @default(cuid())
+  title       String   @unique
+  href        String? // Optional field
+  disabled    Boolean? @default(false)
+  external    Boolean? @default(false)
+  icon        String? // Optional field
+  label       String?
+  description String? // Optional field
+  listOrder   Int
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  navItem  NavItem? @relation("ParentItem", fields: [parentId], references: [id])
+  parentId String? // Foreign key for nesting
 }
