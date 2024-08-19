@@ -31,11 +31,13 @@ export function MobileSidebar({ className }: SidebarProps) {
                                 Overview
                             </h2>
                             <div className="space-y-1">
-                                <DashboardNav
-                                    items={navItems}
-                                    isMobileNav={true}
-                                    setOpen={setOpen}
-                                />
+                                {navItems && (
+                                    <DashboardNav
+                                        items={navItems}
+                                        isMobileNav={true}
+                                        setOpen={setOpen}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>

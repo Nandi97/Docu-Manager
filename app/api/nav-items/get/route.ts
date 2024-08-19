@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { auth } from '@/auth';
 
 export async function GET(request: NextRequest) {
-    // const session = await getServerSession(req, res, authOptions);
+    const session = await auth();
 
-    // if (!session) {
-    // 	return res.status(401).json({ message: 'Please signin to view side menu' });
-    // }
+    if (!session) {
+        return NextResponse.json(
+            { message: 'Please signin to view side menu' },
+            { status: 401 }
+        );
+    }
 
     try {
         const data = await prisma.navItem.findMany({
