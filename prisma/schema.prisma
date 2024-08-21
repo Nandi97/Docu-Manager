@@ -98,3 +98,139 @@ model NavSubItem {
   navItem  NavItem? @relation("ParentItem", fields: [parentId], references: [id])
   parentId String? // Foreign key for nesting
 }
+
+model Employee {
+  id                 String   @id @default(uuid())
+  firstName          String
+  lastName           String
+  email              String   @unique
+  phoneNumber        String
+  dateOfBirth        DateTime
+  addressId          String?
+  dateOfJoining      DateTime
+  designationId      String
+  reportsToId        String?
+  salaryId           String?
+  genderId           Int
+  employeeTypeId     Int
+  payFrequencyId     Int?
+  employmentStatusId Int
+
+  // Relation for managing department head
+  departmentsHeaded  Department[] @relation("DepartmentHead")
+  // Reverse relation to handle employees reporting to this employee
+  employeesReporting Employee[]   @relation("EmployeeReports")
+
+  employeeType     EmployeeType     @relation(fields: [employeeTypeId], references: [id])
+  salary           Salary?          @relation(fields: [salaryId], references: [id])
+  gender           Gender           @relation(fields: [genderId], references: [id])
+  address          Address?         @relation(fields: [addressId], references: [id])
+  employmentStatus EmploymentStatus @relation(fields: [employmentStatusId], references: [id])
+  reportsTo        Employee?        @relation("EmployeeReports", fields: [reportsToId], references: [id])
+  designation      Designation      @relation(fields: [designationId], references: [id])
+  PayFrequency     PayFrequency?    @relation(fields: [payFrequencyId], references: [id])
+
+  deletedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Gender {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  staff Employee[]
+}
+
+model EmployeeType {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  staff Employee[]
+}
+
+model Address {
+  id         String @id @default(uuid())
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String
+
+  employees Employee[]
+
+  deletedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Department {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+  headId      String?
+
+  head Employee? @relation("DepartmentHead", fields: [headId], references: [id])
+
+  deletedAt   DateTime?
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @updatedAt
+  Designation Designation[]
+}
+
+model Designation {
+  id           String  @id @default(uuid())
+  title        String  @unique
+  description  String?
+  departmentId String
+
+  employees Employee[]
+
+  department Department @relation(fields: [departmentId], references: [id])
+
+  deletedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Salary {
+  id           String       @id @default(uuid())
+  baseAmount   Float
+  currency     String
+  payFrequency PayFrequency @relation(fields: [payFrequencyId], references: [id])
+  bonuses      Float?
+  deductions   Float?
+  employees    Employee[]
+
+  deletedAt      DateTime?
+  createdAt      DateTime? @default(now())
+  updatedAt      DateTime? @updatedAt
+  payFrequencyId Int
+}
+
+model PayFrequency {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  staff Employee[]
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  Salary    Salary[]
+}
+
+model EmploymentStatus {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  staff Employee[]
+}

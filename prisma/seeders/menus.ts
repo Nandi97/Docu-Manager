@@ -165,3 +165,74 @@ export function getNavItems() {
         }
     ];
 }
+export async function createOrUpdateNavItem(navItem: any) {
+    const existingNavItem = await prisma.navItem.findUnique({
+        where: { title: navItem.title }
+    });
+
+    const data = {
+        title: navItem.title,
+        href: navItem.href,
+        disabled: navItem.disabled,
+        external: navItem.external,
+        icon: navItem.icon,
+        label: navItem.label,
+        listOrder: navItem.listOrder,
+        description: navItem.description
+    };
+
+    let savedNavItem;
+
+    if (!existingNavItem) {
+        savedNavItem = await prisma.navItem.create({
+            data
+        });
+        console.log(`Created nav item: ${savedNavItem.title}`);
+    } else {
+        savedNavItem = await prisma.navItem.update({
+            where: { id: existingNavItem.id },
+            data
+        });
+        console.log(`Updated nav item: ${savedNavItem.title}`);
+    }
+
+    // Handle nested items (NavSubItem) separately
+    if (navItem.items && navItem.items.length > 0) {
+        for (const subItem of navItem.items) {
+            await createOrUpdateNavSubItem(subItem, savedNavItem.id);
+        }
+    }
+
+    return savedNavItem;
+}
+
+async function createOrUpdateNavSubItem(subItem: any, parentId: string) {
+    const existingSubItem = await prisma.navSubItem.findUnique({
+        where: { title: subItem.title }
+    });
+
+    const data = {
+        title: subItem.title,
+        href: subItem.href,
+        disabled: subItem.disabled,
+        external: subItem.external,
+        icon: subItem.icon,
+        label: subItem.label,
+        listOrder: subItem.listOrder,
+        description: subItem.description,
+        parentId
+    };
+
+    if (!existingSubItem) {
+        await prisma.navSubItem.create({
+            data
+        });
+        console.log(`Created nav sub-item: ${subItem.title}`);
+    } else {
+        await prisma.navSubItem.update({
+            where: { id: existingSubItem.id },
+            data
+        });
+        console.log(`Updated nav sub-item: ${subItem.title}`);
+    }
+}

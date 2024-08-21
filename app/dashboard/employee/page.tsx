@@ -5,10 +5,11 @@ import { EmployeeTable } from '@/components/tables/employee-tables/employee-tabl
 import { buttonVariants } from '@/components/ui/button';
 import { Heading } from '@/components/custom-ui/Heading';
 import { Separator } from '@/components/ui/separator';
-import { Employee } from '@/constants/data';
+// import { Employee } from '@/constants/data';
 import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
+import { Employee } from '@/types';
 
 const breadcrumbItems = [
     { title: 'Dashboard', link: '/dashboard' },
@@ -24,17 +25,22 @@ type paramsProps = {
 export default async function page({ searchParams }: paramsProps) {
     const page = Number(searchParams.page) || 1;
     const pageLimit = Number(searchParams.limit) || 10;
-    const country = searchParams.search || null;
+    const searchQuery = searchParams.search || '';
     const offset = (page - 1) * pageLimit;
 
     const res = await fetch(
-        `https://api.slingacademy.com/v1/sample-data/users?offset=${offset}&limit=${pageLimit}` +
-            (country ? `&search=${country}` : '')
+        `http://localhost:3000/api/employees/get?page=${page}&limit=${pageLimit}` +
+            (searchQuery ? `&search=${searchQuery}` : '')
     );
+
+    if (!res.ok) {
+        throw new Error('Error fetching employees');
+    }
+
     const employeeRes = await res.json();
-    const totalUsers = employeeRes.total_users; //1000
-    const pageCount = Math.ceil(totalUsers / pageLimit);
-    const employee: Employee[] = employeeRes.users;
+    const totalEmployees = employeeRes.totalEmployees;
+    const pageCount = Math.ceil(totalEmployees / pageLimit);
+    const employees: Employee[] = employeeRes.employees;
     return (
         <PageContainer>
             <div className="space-y-4">
@@ -42,7 +48,7 @@ export default async function page({ searchParams }: paramsProps) {
 
                 <div className="flex items-start justify-between">
                     <Heading
-                        title={`Employee (${totalUsers})`}
+                        title={`Employee (${totalEmployees})`}
                         description="Manage employees (Server side table functionalities.)"
                     />
 
@@ -59,8 +65,8 @@ export default async function page({ searchParams }: paramsProps) {
                     searchKey="country"
                     pageNo={page}
                     columns={columns}
-                    totalUsers={totalUsers}
-                    data={employee}
+                    totalUsers={totalEmployees}
+                    data={employees}
                     pageCount={pageCount}
                 />
             </div>

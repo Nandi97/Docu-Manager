@@ -22,3 +22,15 @@ export type NavItemWithOptionalChildren = NavItem & {
 // Define the MainNavItem and SidebarNavItem types based on the optionality of children
 export type MainNavItem = NavItemWithOptionalChildren;
 export type SidebarNavItem = NavItemWithChildren;
+
+export type Employee = Prisma.EmployeeGetPayload<{
+    include: {
+        designation: {
+            include: {
+                department: true;
+            };
+        };
+        employeeType: true;
+        employmentStatus: true;
+    };
+}>;
