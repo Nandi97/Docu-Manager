@@ -13,7 +13,9 @@
         "start": "next start",
         "lint": "next lint",
         "format": "prettier . --write",
-        "prepare": "husky"
+        "prepare": "husky",
+        "vercel-build": "prisma generate && prisma migrate deploy && next build",
+        "prisma:generate": "prisma generate"
     },
     "lint-staged": {
         "**/*": [
