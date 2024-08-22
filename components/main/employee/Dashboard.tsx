@@ -2,7 +2,7 @@
 import React from 'react';
 import { columns } from '@/components/tables/employee-tables/columns';
 import { EmployeeTable } from '@/components/tables/employee-tables/employee-table';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Employee } from '@/types';
 import axios from 'axios';
 
@@ -37,7 +37,8 @@ const Dashboard = ({ page, pageLimit, searchQuery }: DashboardProps) => {
 
     const { data, isLoading, error } = useQuery<any>({
         queryKey: ['employees', page, pageLimit, searchQuery],
-        queryFn: () => fetchEmployees(page, pageLimit, searchQuery)
+        queryFn: () => fetchEmployees(page, pageLimit, searchQuery),
+        placeholderData: keepPreviousData
     });
 
     if (isLoading) return <div>Loading...</div>;
