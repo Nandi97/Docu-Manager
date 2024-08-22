@@ -234,3 +234,37 @@ model EmploymentStatus {
 
   staff Employee[]
 }
+
+model Board {
+  id      String   @id @default(uuid())
+  name    String
+  columns Column[] @relation("BoardColumns")
+
+  deletedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Column {
+  id      String @id @default(uuid())
+  name    String
+  boardId String
+  tasks   Task[] @relation("ColumnTasks")
+  board   Board  @relation("BoardColumns", fields: [boardId], references: [id])
+
+  deletedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Task {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  columnId    String
+  column      Column  @relation("ColumnTasks", fields: [columnId], references: [id])
+
+  deletedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
