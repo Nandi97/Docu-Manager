@@ -1,15 +1,12 @@
 import { Breadcrumbs } from '@/components/custom-ui/breadcrumbs';
 import PageContainer from '@/components/layout/PageContainer';
-import { columns } from '@/components/tables/employee-tables/columns';
-import { EmployeeTable } from '@/components/tables/employee-tables/employee-table';
 import { buttonVariants } from '@/components/ui/button';
 import { Heading } from '@/components/custom-ui/Heading';
 import { Separator } from '@/components/ui/separator';
-// import { Employee } from '@/constants/data';
 import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
-import Link from 'next/link';
-import { Employee } from '@/types';
+import Link from 'next/link'; // Import the new Dashboard component
+import Dashboard from '@/components/main/employee/Dashboard';
 
 const breadcrumbItems = [
     { title: 'Dashboard', link: '/dashboard' },
@@ -22,25 +19,11 @@ type paramsProps = {
     };
 };
 
-export default async function page({ searchParams }: paramsProps) {
+export default function page({ searchParams }: paramsProps) {
     const page = Number(searchParams.page) || 1;
     const pageLimit = Number(searchParams.limit) || 10;
     const searchQuery = searchParams.search || '';
-    const offset = (page - 1) * pageLimit;
 
-    const res = await fetch(
-        `http://localhost:3000/api/employees/get?page=${page}&limit=${pageLimit}` +
-            (searchQuery ? `&search=${searchQuery}` : '')
-    );
-
-    if (!res.ok) {
-        throw new Error('Error fetching employees');
-    }
-
-    const employeeRes = await res.json();
-    const totalEmployees = employeeRes.totalEmployees;
-    const pageCount = Math.ceil(totalEmployees / pageLimit);
-    const employees: Employee[] = employeeRes.employees;
     return (
         <PageContainer>
             <div className="space-y-4">
@@ -48,7 +31,7 @@ export default async function page({ searchParams }: paramsProps) {
 
                 <div className="flex items-start justify-between">
                     <Heading
-                        title={`Employee (${totalEmployees})`}
+                        title="Employee"
                         description="Manage employees (Server side table functionalities.)"
                     />
 
@@ -61,13 +44,10 @@ export default async function page({ searchParams }: paramsProps) {
                 </div>
                 <Separator />
 
-                <EmployeeTable
-                    searchKey="country"
-                    pageNo={page}
-                    columns={columns}
-                    totalUsers={totalEmployees}
-                    data={employees}
-                    pageCount={pageCount}
+                <Dashboard
+                    page={page}
+                    pageLimit={pageLimit}
+                    searchQuery={searchQuery as any}
                 />
             </div>
         </PageContainer>
